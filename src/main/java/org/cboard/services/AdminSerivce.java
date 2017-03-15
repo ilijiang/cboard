@@ -8,10 +8,7 @@ import org.apache.commons.collections.map.HashedMap;
 import org.apache.commons.lang.StringUtils;
 import org.cboard.dao.RoleDao;
 import org.cboard.dao.UserDao;
-import org.cboard.pojo.DashboardRole;
-import org.cboard.pojo.DashboardRoleRes;
-import org.cboard.pojo.DashboardUser;
-import org.cboard.pojo.DashboardUserRole;
+import org.cboard.pojo.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
@@ -139,5 +136,22 @@ public class AdminSerivce {
             }
         }
         return null;
+    }
+
+    //create by lijiang on 20170309
+    public String updateUserCity(String userId, String cityIdArr) {
+        userDao.deleteUserCity(userId);
+        String[] cityId = cityIdArr.split(",");
+        if (cityId != null && cityId.length > 0) {
+            List<DashboardUserCity> list = new ArrayList<>();
+            for (String cid : cityId) {
+                DashboardUserCity userRole = new DashboardUserCity();
+                userRole.setUserId(userId);
+                userRole.setCityId(Integer.valueOf(cid));
+                list.add(userRole);
+            }
+            userDao.saveUserCity(list);
+        }
+        return "1";
     }
 }

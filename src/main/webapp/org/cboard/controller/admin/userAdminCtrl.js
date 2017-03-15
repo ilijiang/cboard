@@ -11,6 +11,43 @@ cBoard.controller('userAdminCtrl', function ($scope, $http, ModalUtils, $filter)
         $scope.isAdmin = response;
     });
 
+
+    // $scope.saveSelectCity = function () {
+    //     var _chkboxs = $("#select_mulit_city_form").find("input[type='checkbox']");
+    //     var selectCityIds = $(_chkboxs).map(function () {
+    //         if (this.checked) {
+    //             return $(this).val();
+    //         }
+    //     }).get().join(",");
+    //     var selectCityNames = $(_chkboxs).map(function () {
+    //         if (this.checked) {
+    //             return $(this).attr("cityname");
+    //         }
+    //     }).get().join(",");
+    //     $scope.curUser.cityNameArr = selectCityNames;
+    //     $scope.curUser.cityIdArr = selectCityIds;
+    //     $("#select_mulit_city_close").trigger("click");
+    //     //$("#select_mulit_city_dialog").modal("hidden");
+    // };
+
+    // $("#select_city_input").bind("click", function () {
+    //     var cityForm = $("#select_mulit_city_form");
+    //     $(cityForm).html("");
+    //     $http.get("admin/getCityList.do").success(function (response) {
+    //         var cityForm = $("#select_mulit_city_form");
+    //         $(cityForm).html("");
+    //         var citys = response;
+    //         for (var i = 0; i < citys.length; i++) {
+    //             var city = citys[i];
+    //             var city_id = city.cityId;
+    //             var city_name = city.cityName;
+    //             var input_checkbox = $('<div class="form-group"><div class="checkbox"><input type="checkbox" value='+city_id+' cityname='+city_name+'>'+city_name+'</input></div></div>');
+    //             cityForm.append(input_checkbox);
+    //         }
+    //         $("#select_mulit_city_dialog").modal('show');
+    //     });
+    // });
+
     var getUserList = function () {
         $http.get("admin/getUserList.do").success(function (response) {
             $scope.userList = response;
@@ -31,6 +68,15 @@ cBoard.controller('userAdminCtrl', function ($scope, $http, ModalUtils, $filter)
         });
     };
     getUserRoleList();
+
+
+    var getCityList = function () {
+        $http.get("admin/getCityList.do").success(function (response) {
+            $scope.cityList = response;
+        });
+    };
+    getCityList();
+
 
     $scope.resList = [{
         id: 'Menu',
@@ -204,15 +250,60 @@ cBoard.controller('userAdminCtrl', function ($scope, $http, ModalUtils, $filter)
         }
     };
 
+
     $scope.newUser = function () {
         $scope.optFlag = 'newUser';
         $scope.curUser = {};
+        $scope.loginNameStatus = false;
     };
 
     $scope.editUser = function (user) {
         $scope.optFlag = 'editUser';
         $scope.curUser = angular.copy(user);
+        $scope.loginNameStatus = true;
     };
+
+    $scope.curUserCitySelect = function () {
+        var curUserCity = $scope.curUser.cityNameArr;
+        $scope.selectCity = new Array();
+        for (var i = 0; i < $scope.cityList.length; i++) {
+            if(RegExp($scope.cityList[i].cityName).test(curUserCity)){
+                $scope.selectCity[i]=true;
+            }
+        }
+    };
+
+    $scope.allSelect = function ($event) {
+        var checkbox = $event.target;
+
+        for (var i = 0; i < $scope.cityList.length; i++) {
+            if(!angular.isArray($scope.selectCity)){
+                $scope.selectCity = new Array();
+            }
+            if(checkbox.checked){
+                $scope.selectCity[i] = true;
+            }else{
+                $scope.selectCity[i] = false;
+            }
+
+        }
+    };
+
+    $scope.saveSelectCity = function () {
+        var selectCityNameList = new Array();
+        var selectCityIdList = new Array();
+        for (var i = 0; i < $scope.cityList.length; i++) {
+            if ($scope.selectCity[i] == true) {
+                selectCityNameList.push($scope.cityList[i].cityName);
+                selectCityIdList.push($scope.cityList[i].cityId);
+            }
+        }
+        $scope.curUser.cityNameArr = selectCityNameList.join(",");
+        $scope.curUser.cityIdArr = selectCityIdList.join(",");
+        //$("#select_mulit_city_close").trigger("click");
+        //$("#select_mulit_city_dialog").modal("hidden");
+    };
+
 
     $scope.newRole = function () {
         $scope.optFlag = 'newRole';

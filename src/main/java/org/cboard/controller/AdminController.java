@@ -2,8 +2,6 @@ package org.cboard.controller;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.google.common.base.Function;
-import com.google.common.collect.Lists;
 import org.cboard.dao.MenuDao;
 import org.cboard.dao.RoleDao;
 import org.cboard.dao.UserDao;
@@ -11,6 +9,8 @@ import org.cboard.pojo.DashboardRole;
 import org.cboard.pojo.DashboardRoleRes;
 import org.cboard.pojo.DashboardUser;
 import org.cboard.pojo.DashboardUserRole;
+import org.cboard.pojo.DashboardCity;
+import org.cboard.pojo.DashboardUserCity;
 import org.cboard.services.AdminSerivce;
 import org.cboard.services.AuthenticationService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,14 +50,32 @@ public class AdminController {
     @RequestMapping(value = "/saveNewUser")
     public String saveNewUser(@RequestParam(name = "user") String user) {
         JSONObject jsonObject = JSONObject.parseObject(user);
-        return adminSerivce.addUser(UUID.randomUUID().toString(), jsonObject.getString("loginName"), jsonObject.getString("userName"), jsonObject.getString("userPassword"));
+        String user_id = UUID.randomUUID().toString();
+        adminSerivce.addUser(user_id, jsonObject.getString("loginName"), jsonObject.getString("userName"), jsonObject.getString("userPassword"));
+        adminSerivce.updateUserCity(user_id,jsonObject.getString("cityIdArr"));
+        return "1";
     }
 
     @RequestMapping(value = "/updateUser")
     public String updateUser(@RequestParam(name = "user") String user) {
         JSONObject jsonObject = JSONObject.parseObject(user);
-        return adminSerivce.updateUser(jsonObject.getString("userId"), jsonObject.getString("loginName"), jsonObject.getString("userName"), jsonObject.getString("userPassword"));
+        adminSerivce.updateUser(jsonObject.getString("userId"), jsonObject.getString("loginName"), jsonObject.getString("userName"), jsonObject.getString("userPassword"));
+        adminSerivce.updateUserCity(jsonObject.getString("userId"),jsonObject.getString("cityIdArr"));
+        return "1";
     }
+
+
+    @RequestMapping(value = "/getCityList")
+    public List<DashboardCity> getCityList() {
+        List<DashboardCity> list = userDao.getCityList();
+        return list;
+    }
+
+//    @RequestMapping(value = "/getUserCityList")
+//    public List<DashboardUserCity> getUserCityList(@RequestParam(name = "userId") String userId) {
+//        List<DashboardUserCity> list = userDao.getUserCityList(userId);
+//        return list;
+//    }
 
     @RequestMapping(value = "/getUserList")
     public List<DashboardUser> getUserList() {

@@ -5,10 +5,12 @@ package org.cboard.pojo;
  */
 public class DashboardUser {
     private String userId;
-    private String loginName;
     private String userName;
+    private String loginName;
     private String userPassword;
     private String userStatus;
+    private String cityNameArr;
+    private String cityIdArr;
 
     public String getUserId() {
         return userId;
@@ -48,5 +50,21 @@ public class DashboardUser {
 
     public void setUserStatus(String userStatus) {
         this.userStatus = userStatus;
+    }
+
+    public String getCityNameArr() {
+        return cityNameArr;
+    }
+
+    public void setCityNameArr(String cityNameArr) {
+        this.cityNameArr = cityNameArr;
+    }
+
+    public String getCityIdArr() {
+        return cityIdArr;
+    }
+
+    public void setCityIdArr(String cityIdArr) {
+        this.cityIdArr = cityIdArr;
     }
 }

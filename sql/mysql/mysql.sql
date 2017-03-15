@@ -60,6 +60,14 @@ CREATE TABLE dashboard_user_role (
   PRIMARY KEY (user_role_id)
 );
 
+CREATE TABLE dashboard_user_role (
+  user_role_id bigint(20) NOT NULL AUTO_INCREMENT,
+  user_id varchar(100) DEFAULT NULL,
+  role_id varchar(100) DEFAULT NULL,
+  PRIMARY KEY (user_role_id)
+);
+
+
 CREATE TABLE dashboard_role (
   role_id varchar(100) NOT NULL,
   role_name varchar(100) DEFAULT NULL,
@@ -73,4 +81,17 @@ CREATE TABLE dashboard_role_res (
   res_type varchar(100) DEFAULT NULL,
   res_id bigint(20) DEFAULT NULL,
   PRIMARY KEY (role_res_id)
+);
+
+CREATE TABLE dashboard_user_info (
+  user_city_id bigint(20) NOT NULL AUTO_INCREMENT,
+  user_id varchar(100) DEFAULT NULL,
+  city_id int DEFAULT NULL,
+  PRIMARY KEY (user_city_id)
+);
+
+CREATE TABLE dashboard_city (
+  city_id int NOT NULL,
+  city_name varchar(100) NOT NULL,
+  PRIMARY KEY (city_id)
 );

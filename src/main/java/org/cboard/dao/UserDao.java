@@ -1,7 +1,9 @@
 package org.cboard.dao;
 
+import org.cboard.pojo.DashboardCity;
 import org.cboard.pojo.DashboardUser;
 import org.cboard.pojo.DashboardUserRole;
+import org.cboard.pojo.DashboardUserCity;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -31,4 +33,13 @@ public interface UserDao {
     int updateUserPassword(String userId, String passowrd, String newPassword);
 
     int deleteUserRoleByRoleId(String roleId);
+
+    //create by lijiang
+    int saveUserCity(List<DashboardUserCity> list);
+
+    int deleteUserCity(String userId);
+
+    List<DashboardCity> getCityList();
+
+    List<DashboardUserCity> getUserCityList(String userId);
 }
