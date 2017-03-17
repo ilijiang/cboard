@@ -29,8 +29,9 @@
                     <li class="user-header">
                         <img src="{{user.avatar}}" class="img-circle">
                         <p>
-                            {{user.username + ' - ' + user.company + ' ' + user.department}}
-                            <small>{{user.userId}}</small>
+                            {{user.username}}
+                            <!--//{{user.username + ' - ' + user.company + ' ' + user.department}}-->
+                            <!--//<small>{{user.userId}}</small>-->
                         </p>
                     </li>
                     <!-- Menu Body -->
@@ -54,7 +55,7 @@
                             <div class="btn btn-default btn-flat" ng-click="changePwd()">Change Password</div>
                         </div>
                         <div class="pull-right">
-                            <a href="/j_spring_cas_security_logout" class="btn btn-default btn-flat">{{'HEADER.SIGN_OUT'|translate}}</a>
+                            <a href="j_spring_cas_security_logout" class="btn btn-default btn-flat">{{'HEADER.SIGN_OUT'|translate}}</a>
                         </div>
                     </li>
                 </ul>

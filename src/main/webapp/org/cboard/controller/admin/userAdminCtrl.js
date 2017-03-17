@@ -254,13 +254,11 @@ cBoard.controller('userAdminCtrl', function ($scope, $http, ModalUtils, $filter)
     $scope.newUser = function () {
         $scope.optFlag = 'newUser';
         $scope.curUser = {};
-        $scope.loginNameStatus = false;
     };
 
     $scope.editUser = function (user) {
         $scope.optFlag = 'editUser';
         $scope.curUser = angular.copy(user);
-        $scope.loginNameStatus = true;
     };
 
     $scope.curUserCitySelect = function () {

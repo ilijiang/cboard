@@ -31,12 +31,6 @@ public class DataProviderService {
     private int resultLimit;
 
     @Autowired
-    private AuthenticationService authenticationService;
-
-    @Autowired
-    private UserDao userDao;
-
-    @Autowired
     private DatasourceDao datasourceDao;
 
     @Autowired
@@ -56,24 +50,11 @@ public class DataProviderService {
         String[][] dataArray = null;
         int resultCount = 0;
         String msg = "1";
-        String cityName = null;
-        String cityId = null;
-        String user_id = authenticationService.getCurrentUser().getUserId();
-        List<DashboardUserCity> user_city = userDao.getUserCityList(user_id);
-        for (int i = 0; i < user_city.size(); i++) {
-            if (i < 1) {
-                cityName = "\'" + user_city.get(i).getCityName() + "\'";
-            } else {
-                cityName = "\'" + user_city.get(i).getCityName() + "\'" + "," + cityName;
-            }
-        }
-        for (int i = 0; i < user_city.size(); i++) {
-            if (i < 1) {
-                cityId = user_city.get(i).getCityName();
-            } else {
-                cityId = user_city.get(i).getCityName() + "," + cityId;
-            }
-        }
+        //String cityName = null;
+        //String cityId = null;
+        //String user_id = authenticationService.getCurrentUser().getUserId();
+        //List<DashboardUserCity> user_city = userDao.getUserCityList(user_id);
+
         if (datasetId != null) {
             Dataset dataset = getDataset(datasetId);
             datasourceId = dataset.getDatasourceId();
@@ -84,20 +65,20 @@ public class DataProviderService {
             JSONObject config = JSONObject.parseObject(datasource.getConfig());
             DataProvider dataProvider = DataProviderManager.getDataProvider(datasource.getType());
             Map<String, String> parameterMap = Maps.transformValues(config, Functions.toStringFunction());
-            String newQuery0 = query.get("sql").replaceAll("\\$user\\.city_name", cityName);
-            newQuery0.replaceAll("\\$user\\.city_id", cityId);
-            Map<String, String> newQuery = new HashMap<String, String>();
-            newQuery.put("sql", newQuery0);
-            resultCount = dataProvider.resultCount(parameterMap, newQuery);
+            //String newQuery0 = query.get("sql").replaceAll("\\$user\\.city_name", cityName);
+            //newQuery0.replaceAll("\\$user\\.city_id", cityId);
+            //Map<String, String> newQuery = new HashMap<String, String>();
+            //newQuery.put("sql", newQuery0);
+            resultCount = dataProvider.resultCount(parameterMap, query);
             if (resultCount > resultLimit) {
                 msg = "Cube result count is " + resultCount + ", greater than limit " + resultLimit;
             } else {
-                dataArray = dataProvider.getData(parameterMap, newQuery);
+                dataArray = dataProvider.getData(parameterMap, query);
             }
         } catch (Exception e) {
             msg = e.getMessage();
         }
-        return new DataProviderResult(dataArray, msg);
+        return new DataProviderResult(dataArray, msg, resultCount);
     }
 
     protected Dataset getDataset(Long datasetId) {
