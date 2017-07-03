@@ -230,6 +230,42 @@
             <version>1.5.3</version>
         </dependency>
 
+        <!--房多多认证依赖开始-->
+        <!--<dependency>
+            <groupId>commons-httpclient</groupId>
+            <artifactId>commons-httpclient</artifactId>
+            <version>3.1</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>fastjson</artifactId>
+            <version>1.2.4</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.shiro</groupId>
+            <artifactId>shiro-all</artifactId>
+            <version> 1.2.3 </version>
+        </dependency>
+        <dependency>
+            <groupId>com.fangdd</groupId>
+            <artifactId>passport-java-client</artifactId>
+            <version>0.0.8-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.oltu.oauth2</groupId>
+            <artifactId>org.apache.oltu.oauth2.authzserver
+            </artifactId>
+            <version> 0.31 </version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.oltu.oauth2</groupId>
+            <artifactId>org.apache.oltu.oauth2.resourceserver
+            </artifactId>
+            <version> 0.31 </version>
+        </dependency>-->
+        <!--房多多认证结束-->
     </dependencies>
 
     <build>

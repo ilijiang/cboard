@@ -372,11 +372,19 @@ cBoard.controller('dashboardViewCtrl', function ($rootScope, $scope, $state, $st
             size: 'lg',
             controller: function ($scope, $uibModalInstance, dataService) {
                 var paramSelects = _.sortBy(dataService.toNumber(param.selects));
-                paramSelects.map(function (d, l) {
+
+                param.selects.map(function (d) {
+                    var l = paramSelects.indexOf(d);
                     param.values.map(function (i) {
                         d == i ? paramSelects.splice(l, 1) : null;
                     });
                 });
+                // // bug paramSelects在循环内每次有变化
+                // paramSelects.map(function (d, l) {
+                //     param.values.map(function (i) {
+                //         d == i ? paramSelects.splice(l, 1) : null;
+                //     });
+                // });
                 $scope.selects = paramSelects;
                 $scope.type = ['=', '≠', '>', '<', '≥', '≤', '(a,b]', '[a,b)', '(a,b)', '[a,b]'];
                 $scope.param = param;

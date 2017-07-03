@@ -66,7 +66,20 @@ cBoard.controller('datasetCtrl', function ($scope, $http, dataService, $uibModal
             return ds.id == $scope.curDataset.data.datasource;
         });
         $scope.curWidget.query = $scope.curDataset.data.query;
-        $scope.loadData();
+        $http.post("dashboard/test.do", {
+            datasource: angular.toJson($scope.datasource),
+            query: angular.toJson($scope.curWidget.query)
+        }).success(function (result) {
+            if (result.status == '1') {
+                $scope.loadData();
+            } else {
+                $scope.alerts = [{
+                    msg: result.msg,
+                    type: 'danger'
+                }];;
+            }
+        });
+
     };
 
     $scope.deleteDs = function (ds) {

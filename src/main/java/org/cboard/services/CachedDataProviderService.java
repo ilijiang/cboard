@@ -58,15 +58,16 @@ public class CachedDataProviderService extends DataProviderService {
         }
     }
 
+    /*create by LiJiang on 2017/08/02*/
     private DataProviderResult filterData(DataProviderResult t) {
-
         String user_id = authenticationService.getCurrentUser().getUserId();
         List<DashboardUserCity> user_city = userDao.getUserCityList(user_id);
+        String[][] reult = t.getData();
         ArrayList<String> userCityList = new ArrayList<>();
         ArrayList<String[]> filterdata = new ArrayList<>();
 
 
-        int k = Arrays.asList(t.getData()[0]).indexOf("城市");
+        int k = Arrays.asList(reult[0]).indexOf("城市");
 
         for (int i = 0; i < user_city.size(); i++) {
             userCityList.add(user_city.get(i).getCityName());
@@ -74,11 +75,11 @@ public class CachedDataProviderService extends DataProviderService {
 
         if (k >= 0) {
 
-            filterdata.add(t.getData()[0]);
+            filterdata.add(reult[0]);
 
-            for (int j = 1; j < t.getData().length; j++) {
-                if (userCityList.indexOf(t.getData()[j][k]) >= 0) {
-                    filterdata.add(t.getData()[j]);
+            for (int j = 1; j < reult.length; j++) {
+                if (userCityList.indexOf(reult[j][k]) >= 0) {
+                    filterdata.add(reult[j]);
                     //userCityList.remove(userCityList.indexOf(t.getData()[j][k]));
                 }
             }
@@ -88,13 +89,11 @@ public class CachedDataProviderService extends DataProviderService {
 
         if (!filterdata.isEmpty()) {
             String[][] data = new String[filterdata.size()][];
-            for (int i = 0; i<filterdata.size();i++)
-            {
+            for (int i = 0; i < filterdata.size(); i++) {
                 data[i] = filterdata.get(i);
             }
-            return new DataProviderResult(data,t.getMsg(),t.getResultCount());
-        }else
-        {
+            return new DataProviderResult(data, t.getMsg(), t.getResultCount());
+        } else {
             return t;
         }
 

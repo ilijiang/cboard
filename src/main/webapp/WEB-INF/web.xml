@@ -10,6 +10,34 @@
         <param-value>classpath:spring.xml,classpath:spring-mvc.xml,classpath:spring-mybatis.xml,classpath:spring-security.xml</param-value>
     </context-param>
 
+    <!--<filter>
+        <filter-name>oauthFilter</filter-name>
+        <filter-class>
+            com.fangdd.passport.filter.MyOAuth2AuthenticationFilter
+        </filter-class>
+        <init-param>
+            &lt;!&ndash; 配置文件名 &ndash;&gt;
+            <param-name>oauthConfig</param-name>
+            <param-value>oauthconfig.properties</param-value>
+        </init-param>
+        <init-param>
+            &lt;!&ndash; 编码格式 &ndash;&gt;
+            <param-name>charset</param-name>
+            <param-value>UTF-8</param-value>
+        </init-param>
+        <init-param>
+            &lt;!&ndash;不需要过滤检查的文件配置&ndash;&gt;
+            <param-name>excludeURLs</param-name>
+            <param-value>/**/*.html,/**/*.css,/**/*.js</param-value>
+        </init-param>
+    </filter>
+    <filter-mapping>
+        <filter-name>oauthFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>-->
+
+
+
     <filter>
         <filter-name>encodingFilter</filter-name>
         <filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
