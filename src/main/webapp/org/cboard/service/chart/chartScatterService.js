@@ -9,6 +9,7 @@ cBoard.service('chartScatterService', function (dataService) {
     };
 
     this.parseOption = function (data) {
+        var chartConfig = data.chartConfig;
         var casted_keys = data.keys;
         var casted_values = data.series;
         var aggregate_data = data.data;
@@ -145,6 +146,23 @@ cBoard.service('chartScatterService', function (dataService) {
                 };
             })
         };
+
+        var tunningOpt = chartConfig.option;
+        if (tunningOpt) {
+            if (tunningOpt.dataZoom == true) {
+                echartOption.dataZoom = {
+                    show: true,
+                    start : 0,
+                    end: 100
+                };
+            }
+            if (tunningOpt.legendShow == false) {
+                echartOption.grid = echartsBasicOption.grid;
+                echartOption.grid.top = '5%';
+                echartOption.legend.show = false;
+            }
+        }
+
         return echartOption;
     };
 });
