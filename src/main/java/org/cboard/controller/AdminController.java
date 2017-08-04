@@ -68,7 +68,7 @@ public class AdminController {
         JSONObject jsonObject = JSONObject.parseObject(user);
         String user_id = UUID.randomUUID().toString();
         adminSerivce.addUser(user_id, jsonObject.getString("loginName"), jsonObject.getString("userName"), jsonObject.getString("userPassword"));
-        adminSerivce.updateUserCity(user_id, jsonObject.getString("cityIdArr"));
+        adminSerivce.updateUserAuthority(user_id, jsonObject.getString("cityNameArr"));
         return "1";
     }
 
@@ -76,7 +76,7 @@ public class AdminController {
     public String updateUser(@RequestParam(name = "user") String user) {
         JSONObject jsonObject = JSONObject.parseObject(user);
         adminSerivce.updateUser(jsonObject.getString("userId"), jsonObject.getString("loginName"), jsonObject.getString("userName"), jsonObject.getString("userPassword"));
-        adminSerivce.updateUserCity(jsonObject.getString("userId"), jsonObject.getString("cityIdArr"));
+        adminSerivce.updateUserAuthority(jsonObject.getString("userId"), jsonObject.getString("cityNameArr"));
         return "1";
     }
 
@@ -88,6 +88,12 @@ public class AdminController {
     @RequestMapping(value = "/getCityList")
     public List<DashboardCity> getCityList() {
         List<DashboardCity> list = userDao.getCityList();
+        return list;
+    }
+
+    @RequestMapping(value = "/getUserCityList")
+    public List<DashboardUserAuthority> getUserCityList() {
+        List<DashboardUserAuthority> list = userDao.getUserCityList();
         return list;
     }
 

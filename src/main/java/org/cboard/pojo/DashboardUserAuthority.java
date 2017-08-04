@@ -4,17 +4,9 @@ package org.cboard.pojo;
  * Created by lijiang on 7/10/17.
  */
 public class DashboardUserAuthority {
-    String userAuthorityId;
+
     String userId;
-    Integer cityId;
-
-    public String getUserAuthorityId() {
-        return userAuthorityId;
-    }
-
-    public void setUserAuthorityId(String userAuthorityId) {
-        this.userAuthorityId = userAuthorityId;
-    }
+    String cityNameArr;
 
     public String getUserId() {
         return userId;
@@ -24,11 +16,11 @@ public class DashboardUserAuthority {
         this.userId = userId;
     }
 
-    public Integer getCityId() {
-        return cityId;
+    public String getCityNameArr() {
+        return cityNameArr;
     }
 
-    public void setCityId(Integer cityId) {
-        this.cityId = cityId;
+    public void setCityNameArr(String cityNameArr) {
+        this.cityNameArr = cityNameArr;
     }
 }

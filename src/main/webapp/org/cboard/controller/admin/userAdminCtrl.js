@@ -36,6 +36,13 @@ cBoard.controller('userAdminCtrl', function ($scope, $http, ModalUtils, $filter)
     };
     getUserRoleList();
 
+    var getUserCityList = function () {
+        $http.get("admin/getUserCityList.do").success(function (response) {
+            $scope.userCityNameArr = response;
+        })
+    }
+    getUserCityList();
+
     $scope.tree = {menu: {}, board: {}, datasource: {}, dataset: {}, widget: {}, job: {}};
     $scope.tree.menu.resList = [{
         id: 'Menu',
@@ -326,7 +333,11 @@ cBoard.controller('userAdminCtrl', function ($scope, $http, ModalUtils, $filter)
     $scope.editUser = function (user) {
         $scope.optFlag = 'editUser';
         $scope.curUser = angular.copy(user);
-        // $scope.loginNameStatus = true;
+        $scope.curUser.cityNameArr = _.filter($scope.userCityNameArr, function (e) {
+            return e.userId == $scope.curUser.userId;
+        })[0].cityNameArr;
+        // $scope.curUser.cityNameArr = $scope.curUserCityNameArr.cityNameArr;
+        // var lala = $scope.curUser.cityNameArr.cityNameArr[0];
     };
 
     $scope.curUserCitySelect = function () {
@@ -365,7 +376,7 @@ cBoard.controller('userAdminCtrl', function ($scope, $http, ModalUtils, $filter)
             }
         }
         $scope.curUser.cityNameArr = selectCityNameList.join(",");
-        $scope.curUser.cityIdArr = selectCityIdList.join(",");
+        // $scope.curUser.cityIdArr = selectCityIdList.join(",");
         //$("#select_mulit_city_close").trigger("click");
         //$("#select_mulit_city_dialog").modal("hidden");
     };

@@ -120,11 +120,11 @@ public class DataProviderService {
     private Map<Integer, String> filterDim(String[] d, String columnName) {
         Map<Integer, String> map = new HashMap<>();
         String userId = authenticationService.getCurrentUser().getUserId();
-        List<String> cityList = userDao.getUserCityListByUserId(userId);
+        String cityList = userDao.getUserCityListByUserId(userId);
         for (int i = 0; i < d.length; i++) {
             map.put(i, d[i]);
             if (columnName.equals("城市")) {
-                if (cityList.indexOf(d[i]) < 0) {
+                if (cityList.contains(d[i])) {
                     map.remove(i);
                 }
             }

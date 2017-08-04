@@ -39,11 +39,18 @@ public interface UserDao {
     /**
      * create by lijiang on 2017/07/10.
      */
-    List<String> getUserCityListByUserId(String userId);
+    String getUserCityListByUserId(String userId);
+
+    List<DashboardUserAuthority> getUserCityList();
 
     List<DashboardCity> getCityList();
 
-    int deleteUserCityByUserId(String userId);
+//    int deleteUserCityByUserId(String userId);
+//
+//    int saveUserCity(List<DashboardUserAuthority> list);
 
-    int saveUserCity(List<DashboardUserAuthority> list);
+
+    int deleteUserAuthorityByUserId(String userID);
+
+    int saveUserAuthority(DashboardUserAuthority userAuthority);
 }
