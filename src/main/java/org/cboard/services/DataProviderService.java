@@ -121,11 +121,13 @@ public class DataProviderService {
         Map<Integer, String> map = new HashMap<>();
         String userId = authenticationService.getCurrentUser().getUserId();
         String cityList = userDao.getUserCityListByUserId(userId);
-        for (int i = 0; i < d.length; i++) {
-            map.put(i, d[i]);
-            if (columnName.equals("城市")) {
-                if (cityList.contains(d[i])) {
-                    map.remove(i);
+        if (cityList != null){
+            for (int i = 0; i < d.length; i++) {
+                map.put(i, d[i]);
+                if (columnName.equals("城市")) {
+                    if (cityList.indexOf(d[i]) < 0) {
+                        map.remove(i);
+                    }
                 }
             }
         }
