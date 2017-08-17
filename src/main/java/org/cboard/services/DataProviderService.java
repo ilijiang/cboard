@@ -48,7 +48,9 @@ public class DataProviderService {
     private DataProvider getDataProvider(Long datasourceId, Map<String, String> query, Dataset dataset) throws Exception {
         if (dataset != null) {
             datasourceId = dataset.getDatasourceId();
-            query = dataset.getQuery();
+            if(query == null) {
+                query = dataset.getQuery();
+            }
         }
         DashboardDatasource datasource = datasourceDao.getDatasource(datasourceId);
         JSONObject datasourceConfig = JSONObject.parseObject(datasource.getConfig());

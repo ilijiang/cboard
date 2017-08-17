@@ -82,20 +82,20 @@
                                 <div class="col-md-12">
                                     <div class="form-group">
                                         <div class="col-sm-offset-2 col-xs-12 col-sm-5 col-md-4 col-lg-2">
-                                            <a class="btn btn-block btn-success" ng-click="customDs=!customDs">
-                                                <i class="fa fa-fw {{customDs?'fa-table':'fa-edit'}}"></i>{{(customDs?'CONFIG.WIDGET.EXIST_QUERY':'CONFIG.WIDGET.NEW_QUERY')|translate}}
-                                            </a>
-                                        </div>
-                                        <div class="col-xs-12 col-sm-5 col-md-3 col-lg-2">
+                                            <!--<a class="btn btn-block btn-success" ng-click="customDs=!customDs">-->
+                                                <!--<i class="fa fa-fw {{customDs?'fa-table':'fa-edit'}}"></i>{{(customDs?'CONFIG.WIDGET.EXIST_QUERY':'CONFIG.WIDGET.NEW_QUERY')|translate}}-->
+                                            <!--</a>-->
+                                        <!--</div>-->
+                                        <!--<div class="col-xs-12 col-sm-5 col-md-3 col-lg-2">-->
                                             <button type="button" class="btn btn-block btn-success" ng-click="loadData()">
                                                 {{'CONFIG.WIDGET.LOAD_DATA'|translate}}
                                             </button>
                                         </div>
-                                        <div class="col-xs-12 col-sm-5 col-md-3 col-lg-2">
-                                            <label>
-                                                <input type="checkbox" ng-model="loadFromCache"> {{'CONFIG.WIDGET.FROM_CACHE'|translate}}
-                                            </label>
-                                        </div>
+                                        <!--<div class="col-xs-12 col-sm-5 col-md-3 col-lg-2">-->
+                                            <!--<label>-->
+                                                <!--<input type="checkbox" ng-model="loadFromCache"> {{'CONFIG.WIDGET.FROM_CACHE'|translate}}-->
+                                            <!--</label>-->
+                                        <!--</div>-->
                                     </div>
                                     <div class="form-group" ng-repeat="alert in alerts">
                                         <div class="col-sm-offset-2 col-sm-10">
@@ -157,7 +157,7 @@
                                             <li class=""><a id="viewQuery_widget_tab" href="#viewQuery_widget" data-toggle="tab" aria-expanded="false">Query</a></li>
                                             <li class=""><a id="options_tab" href="#options" data-toggle="tab" aria-expanded="false">Option</a></li>
                                             <li class="pull-right">
-                                                <button type="submit" ng-click="preview()"
+                                                <button type="submit" ng-click="setSqlParam()"
                                                         class="btn btn-success btn-sm">
                                                     {{'CONFIG.WIDGET.PREVIEW'|translate}}
                                                 </button>
@@ -214,6 +214,33 @@
                     </div>
                     <i class="fa fa-spinner fa-spin"></i>
                 </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="sql_param_set" class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog"
+     aria-labelledby="myModalLabel">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title" id="myModalLabel">请指定此查询的参数:</h4>
+            </div>
+            <div class="modal-body">
+                <form style="margin-left: 40px">
+                    <div class="row" ng-repeat="param in sqlParams">
+                        {{param}}:<input type="text" ng-model="$parent.paramValue[$index]">
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">
+                    取消
+                </button>
+                <button type="button" class="btn btn-primary" ng-click="submitParam()" data-dismiss="modal">确定
+                </button>
             </div>
         </div>
     </div>

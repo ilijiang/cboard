@@ -98,3 +98,15 @@ CREATE TABLE dashboard_board_param (
   config text,
   PRIMARY KEY (board_param_id)
 );
+
+CREATE TABLE dashboard_user_authority (
+  user_id varchar(50) not null,
+  city_arr text,
+  PRIMARY KEY (user_id)
+);
+
+CREATE TABLE dashboard_city (
+  city_id varchar(50) not null,
+  city_name varchar(50),
+  PRIMARY KEY (city_id)
+);

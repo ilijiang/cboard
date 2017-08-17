@@ -528,7 +528,7 @@ cBoard.controller('widgetCtrl', function ($scope, $stateParams, $http, $uibModal
                 var rule = $scope.configRule[type];
                 var config = $scope.curWidget.config;
                 var flattenValues = [];
-                _.each(config.values, function(v) {
+                _.each(config.values, function (v) {
                     flattenValues = flattenValues.concat(v.cols);
                 });
                 if (_.size(config.keys) == 0 && _.size(config.groups) == 0 && _.size(flattenValues) == 0) {
@@ -713,7 +713,7 @@ cBoard.controller('widgetCtrl', function ($scope, $stateParams, $http, $uibModal
 
         $scope.previewQuery = function () {
             $('#viewQuery_widget').html("");
-            $timeout(function(){
+            $timeout(function () {
                 angular.element('#viewQuery_widget_tab').trigger('click');
             });
             $scope.loadingPre = true;
@@ -730,13 +730,48 @@ cBoard.controller('widgetCtrl', function ($scope, $stateParams, $http, $uibModal
             });
         };
 
+        $scope.setSqlParam = function () {
+            var patt = /\${(.*?)}/g;
+            if (patt.test($scope.dataset.data.query.sql)) {
+                var arr = $scope.dataset.data.query.sql.match(patt);
+                $scope.sqlParams = [
+                    arr[0].replace(patt, "$1"),
+                ]
+                for (var i = 1; i < arr.length; i++) {
+                    var rep = arr[i].replace(patt, "$1");
+                    if ($scope.sqlParams.indexOf(rep) < 0) {
+                        $scope.sqlParams.push(rep);
+                    }
+                }
+                $('#sql_param_set').modal("show");
+            } else {
+              $scope.preview();
+            }
+        };
+
+
+        $scope.submitParam = function () {
+            $scope.curWidget.query = $scope.dataset.data.query;
+            if ($scope.sqlParams != null) {
+                for (var i = 0; i < $scope.sqlParams.length; i++) {
+                    var paramName = new RegExp("\\${" + $scope.sqlParams[i] + "}", "gi");
+                    var paramValue = $scope.paramValue[i];
+                    $scope.curWidget.query.sql = $scope.dataset.data.query.sql.replace(paramName, paramValue);
+                }
+            }
+            $scope.preview();
+        }
+
+
         $scope.preview = function () {
             $('#preview_widget').html("");
-            $timeout(function(){
+            $timeout(function () {
                 angular.element('#preview_widget_tab').trigger('click');
             });
             $scope.loadingPre = true;
             var charType = $scope.curWidget.config.chart_type;
+            //设置sql参数
+
             //百度地图特殊处理
             if (charType == 'markLineMapBmap' || charType == 'heatMapBmap') {
                 chartService.render($('#preview_widget'), {
@@ -930,7 +965,7 @@ cBoard.controller('widgetCtrl', function ($scope, $stateParams, $http, $uibModal
             $http.post("dashboard/checkWidget.do", {id: widget.id}).success(function (response) {
                 if (response.status == '1') {
                     doEditWgt(widget);
-                    if($scope.customDs == true) $scope.doConfigParams();
+                    if ($scope.customDs == true) $scope.doConfigParams();
                 } else {
                     var d = widget.data.datasetId ? 'CONFIG.WIDGET.DATASET' : 'CONFIG.WIDGET.DATA_SOURCE';
                     ModalUtils.alert(translate("ADMIN.CONTACT_ADMIN") + "：" + translate(d) + '/' + response.msg, "modal-danger", "lg");
@@ -938,7 +973,7 @@ cBoard.controller('widgetCtrl', function ($scope, $stateParams, $http, $uibModal
             });
         };
 
-        $scope.editCurWgt = function() {
+        $scope.editCurWgt = function () {
             var wgt = _.find($scope.widgetList, function (w) {
                 return w.id == $scope.widgetId;
             });
@@ -980,7 +1015,7 @@ cBoard.controller('widgetCtrl', function ($scope, $stateParams, $http, $uibModal
             addWatch();
         };
 
-        $scope.doCancel = function() {
+        $scope.doCancel = function () {
             if ($scope.optFlag == 'new') {
                 $scope.newConfig();
                 $scope.filterSelect = {};
@@ -1104,7 +1139,7 @@ cBoard.controller('widgetCtrl', function ($scope, $stateParams, $http, $uibModal
             }
         };
 
-        $scope.getOptionsView = function() {
+        $scope.getOptionsView = function () {
             var basePath = 'org/cboard/view/config/chart/options/';
             if ($scope.curWidget.config && $scope.curWidget.config.chart_type) {
                 return basePath + $scope.curWidget.config.chart_type + '.html';
@@ -1515,11 +1550,11 @@ cBoard.controller('widgetCtrl', function ($scope, $stateParams, $http, $uibModal
             var province = _.find($scope.provinces, function (e) {
                 return e.code == $scope.curWidget.config.province.code;
             });
-            if(province && province.cities){
+            if (province && province.cities) {
                 $scope.cities = province.cities;
-            }else if($scope.curWidget.config.city && $scope.curWidget.config.city.code){
+            } else if ($scope.curWidget.config.city && $scope.curWidget.config.city.code) {
                 $scope.cities = [];
-                $scope.curWidget.config.city.code="";
+                $scope.curWidget.config.city.code = "";
             }
         }
         /** js tree related End... **/
