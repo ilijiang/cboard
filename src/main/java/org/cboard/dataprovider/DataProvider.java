@@ -2,6 +2,8 @@ package org.cboard.dataprovider;
 
 import com.alibaba.fastjson.JSONObject;
 import com.google.common.base.Charsets;
+import com.google.common.collect.Interner;
+import com.google.common.collect.Interners;
 import com.google.common.hash.Hashing;
 import com.googlecode.aviator.AviatorEvaluator;
 import org.cboard.dataprovider.aggregator.Aggregatable;
@@ -12,6 +14,7 @@ import org.cboard.dataprovider.config.ConfigComponent;
 import org.cboard.dataprovider.config.DimensionConfig;
 import org.cboard.dataprovider.expression.NowFunction;
 import org.cboard.dataprovider.result.AggregateResult;
+import org.cboard.dto.DataProviderResult;
 import org.cboard.util.NaturalOrderComparator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,14 +29,17 @@ import java.util.stream.Collectors;
 public abstract class DataProvider {
 
     private InnerAggregator innerAggregator;
+    private DataProviderResult dataProviderResult;
     protected Map<String, String> dataSource;
     protected Map<String, String> query;
     private int resultLimit;
     private String userID;
-    private long interval = 12 * 60 * 60; //second
+    private long interval = 24 * 60 * 60; //second
 
     public static final String NULL_STRING = "#NULL";
     private static final Logger logger = LoggerFactory.getLogger(DataProvider.class);
+
+//    private Interner<String> mStringInterer = Interners.newWeakInterner();
 
     static {
         AviatorEvaluator.addFunction(new NowFunction());
@@ -54,6 +60,12 @@ public abstract class DataProvider {
             checkAndLoad(reload);
             return innerAggregator.queryAggData(ac);
         }
+    }
+
+
+    public final DataProviderResult getDataResult(boolean reload) throws Exception {
+        checkAndLoad(reload);
+        return dataProviderResult;
     }
 
     public final String getViewAggDataQuery(AggConfig config) throws Exception {
@@ -99,13 +111,23 @@ public abstract class DataProvider {
         return columns;
     }
 
+
+//    public final String[][] getResult(boolean reload) throws Exception {
+//        String[][] data = null;
+//        data = getData();
+//        return data;
+//    }
+
     private void checkAndLoad(boolean reload) throws Exception {
         String key = getLockKey(dataSource, query);
         synchronized (key.intern()) {
             if (reload || !innerAggregator.checkExist()) {
                 String[][] data = getData();
+                dataProviderResult = new DataProviderResult(data);
                 innerAggregator.loadData(data, interval);
                 logger.info("loadData {}", key);
+            }else{
+                dataProviderResult = new DataProviderResult(innerAggregator.getColumn());
             }
         }
     }
@@ -138,7 +160,8 @@ public abstract class DataProvider {
     }
 
     private String getLockKey(Map<String, String> dataSource, Map<String, String> query) {
-        return Hashing.md5().newHasher().putString(JSONObject.toJSON(dataSource).toString() + JSONObject.toJSON(query).toString(), Charsets.UTF_8).hash().toString();
+//        return Hashing.md5().newHasher().putString(JSONObject.toJSON(dataSource).toString() + JSONObject.toJSON(query).toString(), Charsets.UTF_8).hash().toString();
+        return Hashing.md5().newHasher().putString(JSONObject.toJSON(dataSource).toString(), Charsets.UTF_8).hash().toString();
     }
 
     public List<DimensionConfig> filterCCList2DCList(List<ConfigComponent> filters) {
@@ -170,7 +193,7 @@ public abstract class DataProvider {
     }
 
     public void setQuery(Map<String, String> query) {
-        this.query =  query;
+        this.query = query;
     }
 
     public void setResultLimit(int resultLimit) {

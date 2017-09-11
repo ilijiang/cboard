@@ -9,11 +9,14 @@ cBoard.controller('datasetCtrl', function ($scope, $http, dataService, $uibModal
     $scope.curWidget = {};
     $scope.alerts = [];
     $scope.verify = {dsName: true};
-    $scope.loadFromCache = true;
+    $scope.loadFromCache = false;
     $scope.queryAceOpt = cbAcebaseOption;
     $scope.hierarchy = translate("CONFIG.DATASET.HIERARCHY");
     $scope.uuid4 = uuid4;
     $scope.params = [];
+    $scope.paramValue = [];
+
+    $scope.resultData = {};
 
     var treeID = 'dataSetTreeID'; // Set to a same value with treeDom
     var originalData = [];
@@ -104,7 +107,7 @@ cBoard.controller('datasetCtrl', function ($scope, $http, dataService, $uibModal
             return ds.id == $scope.curDataset.data.datasource;
         });
         $scope.curWidget.query = $scope.curDataset.data.query;
-        $scope.loadData();
+        // $scope.loadData();
     };
 
     $scope.checkExist = function (column) {
@@ -469,13 +472,43 @@ cBoard.controller('datasetCtrl', function ($scope, $http, dataService, $uibModal
         });
     };
 
+    $scope.setSqlParam = function () {
+        var patt = /\${(.*?)}/g;
+        if (patt.test($scope.curWidget.query.sql)) {
+            var arr = $scope.curWidget.query.sql.match(patt);
+            $scope.sqlParams = [
+                arr[0].replace(patt, "$1"),
+            ]
+            for (var i = 1; i < arr.length; i++) {
+                var rep = arr[i].replace(patt, "$1");
+                if ($scope.sqlParams.indexOf(rep) < 0) {
+                    $scope.sqlParams.push(rep);
+                }
+            }
+            $('#sql_param_set').modal("show");
+        } else {
+            $scope.preview();
+        }
+    };
+
+
     $scope.loadData = function () {
         cleanPreview();
         $scope.loading = true;
 
-        dataService.getColumns({
+        var curQuery = angular.copy($scope.curWidget.query)
+
+        if ($scope.sqlParams != null) {
+            for (var i = 0; i < $scope.sqlParams.length; i++) {
+                var paramName = new RegExp("\\${" + $scope.sqlParams[i] + "}", "gi");
+                var paramValue = $scope.paramValue[i];
+                curQuery.sql = curQuery.sql.replace(paramName, paramValue);
+            }
+        }
+
+        dataService.getDps({
             datasource: $scope.datasource.id,
-            query: $scope.curWidget.query,
+            query: curQuery,
             datasetId: null,
             reload: !$scope.loadFromCache,
             callback: function (dps) {
@@ -484,28 +517,29 @@ cBoard.controller('datasetCtrl', function ($scope, $http, dataService, $uibModal
                 if (dps.msg == "1") {
                     $scope.alerts = [];
                     $scope.selects = dps.columns;
+                    $scope.results = dps.data;
                 } else {
                     $scope.alerts = [{msg: dps.msg, type: 'danger'}];
                 }
 
-                var widget = {
-                    chart_type: "table",
-                    filters: [],
-                    groups: [],
-                    keys: [],
-                    selects: [],
-                    values: [{
-                        cols: []
-                    }
-                    ]
-                };
-                _.each($scope.selects, function (c) {
-                    widget.keys.push({
-                        col: c,
-                        type: "eq",
-                        values: []
-                    });
-                });
+                // var widget = {
+                //     chart_type: "table",
+                //     filters: [],
+                //     groups: [],
+                //     keys: [],
+                //     selects: [],
+                //     values: [{
+                //         cols: []
+                //     }
+                //     ]
+                // };
+                // _.each($scope.selects, function (c) {
+                //     widget.keys.push({
+                //         col: c,
+                //         type: "eq",
+                //         values: []
+                //     });
+                // });
             }
         });
     };

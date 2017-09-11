@@ -43,7 +43,8 @@ public class JvmAggregator extends InnerAggregator {
     private CacheManager<String[][]> rawDataCache;
 
     private String getCacheKey() {
-        return Hashing.md5().newHasher().putString(JSONObject.toJSON(dataSource).toString() + JSONObject.toJSON(query).toString(), Charsets.UTF_8).hash().toString();
+//        return Hashing.md5().newHasher().putString(JSONObject.toJSON(dataSource).toString() + JSONObject.toJSON(query).toString(), Charsets.UTF_8).hash().toString();
+        return Hashing.md5().newHasher().putString(JSONObject.toJSON(dataSource).toString(), Charsets.UTF_8).hash().toString();
     }
 
     public boolean checkExist() {

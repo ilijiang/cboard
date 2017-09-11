@@ -307,8 +307,8 @@ public class DashboardController {
         return dataProviderService.getDimensionValues(datasourceId, strParams, datasetId, colmunName, config, reload);
     }
 
-    @RequestMapping(value = "/getColumns")
-    public DataProviderResult getColumns(@RequestParam(name = "datasourceId", required = false) Long datasourceId,
+    @RequestMapping(value = "/getDps")
+    public DataProviderResult getDps(@RequestParam(name = "datasourceId", required = false) Long datasourceId,
                                          @RequestParam(name = "query", required = false) String query,
                                          @RequestParam(name = "datasetId", required = false) Long datasetId, @RequestParam(name = "reload", required = false, defaultValue = "false") Boolean reload) {
         Map<String, String> strParams = null;
@@ -316,7 +316,7 @@ public class DashboardController {
             JSONObject queryO = JSONObject.parseObject(query);
             strParams = Maps.transformValues(queryO, Functions.toStringFunction());
         }
-        return dataProviderService.getColumns(datasourceId, strParams, datasetId, reload);
+        return dataProviderService.getDps(datasourceId, strParams, datasetId, reload);
     }
 
     @RequestMapping(value = "/getAggregateData")

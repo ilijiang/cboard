@@ -84,7 +84,7 @@ cBoard.controller('boardCtrl', function ($rootScope, $scope, $http, ModalUtils, 
         $scope.boardDataset = [];
         _.each(datasetIdArr, function (d) {
             status.i++;
-            dataService.getColumns({
+            dataService.getDps({
                 datasource: null,
                 query: null,
                 datasetId: d,
@@ -106,7 +106,7 @@ cBoard.controller('boardCtrl', function ($rootScope, $scope, $http, ModalUtils, 
         });
         _.each(widgetArr, function (w) {
             status.i++;
-            dataService.getColumns({
+            dataService.getDps({
                 datasource: w.data.datasource,
                 query: w.data.query,
                 datasetId: null,
@@ -463,7 +463,7 @@ cBoard.controller('boardCtrl', function ($rootScope, $scope, $http, ModalUtils, 
         });
         e.relation.targetFields = cols;
         if (cols.length == 0) {
-            dataService.getColumns({
+            dataService.getDps({
                 datasource: null,
                 query: null,
                 datasetId: w.data.datasetId,

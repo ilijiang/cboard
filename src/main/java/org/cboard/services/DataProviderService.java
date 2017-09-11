@@ -136,6 +136,20 @@ public class DataProviderService {
         return map;
     }
 
+    public DataProviderResult getDps(Long datasourceId, Map<String, String> query, Long datasetId, boolean reload) {
+        DataProviderResult dps = new DataProviderResult();
+        try {
+            Dataset dataset = getDataset(datasetId);
+            DataProvider dataProvider = getDataProvider(datasourceId, query, dataset);
+            dps = dataProvider.getDataResult(reload);
+            dps.setMsg("1");
+        } catch (Exception e) {
+            e.printStackTrace();
+            dps.setMsg(e.getMessage());
+        }
+        return dps;
+    }
+
     public DataProviderResult getColumns(Long datasourceId, Map<String, String> query, Long datasetId, boolean reload) {
         DataProviderResult dps = new DataProviderResult();
         try {

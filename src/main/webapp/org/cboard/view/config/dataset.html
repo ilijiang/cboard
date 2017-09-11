@@ -79,15 +79,15 @@
                                     <div class="form-group">
                                         <div class="col-sm-offset-2 col-sm-2">
                                             <button type="button" class="btn btn-block btn-success"
-                                                    ng-click="loadData()">{{'CONFIG.DATASET.LOAD_DATA'|translate}}
+                                                    ng-click="setSqlParam()">{{'CONFIG.DATASET.LOAD_DATA'|translate}}
                                             </button>
                                         </div>
-                                        <div class="col-xs-12 col-sm-5 col-md-3 col-lg-2">
-                                            <label>
-                                                <input type="checkbox" ng-model="loadFromCache">
-                                                {{'CONFIG.WIDGET.FROM_CACHE'|translate}}
-                                            </label>
-                                        </div>
+                                        <!--<div class="col-xs-12 col-sm-5 col-md-3 col-lg-2">-->
+                                        <!--<label>-->
+                                        <!--<input type="checkbox" ng-model="loadFromCache">-->
+                                        <!--{{'CONFIG.WIDGET.FROM_CACHE'|translate}}-->
+                                        <!--</label>-->
+                                        <!--</div>-->
                                     </div>
                                 </div>
                             </div>
@@ -104,18 +104,25 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="row" ng-show="selects">
-                                <div class="col-md-6">
-                                    <div class="form-control"
-                                         style="min-height: 200px;height: auto;padding: 0px; border: 2px dashed #d2d6de">
-                                        <span ng-repeat="o in selects"
-                                              class="btn btn-sm" style="margin: 3px 3px;"
-                                              ng-class="{true:'btn-primary',false:'btn-default'}[checkExist(o)]"
-                                              dnd-draggable="{type: 'column', column: o}" dnd-type="'column'"
-                                              ng-click="toDimension({type: 'column', column: o})">{{o}}</span>
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
+                            <!--<div class="row" ng-show="selects">
+                                <table>
+                                    <tr ng-repeat="item in selects">
+                                        <td>{{$index+1}}</td>
+                                        <td>{{item}}</td>
+                                    </tr>
+                                </table>
+
+                                &lt;!&ndash;<div class="col-md-6">&ndash;&gt;
+                                    &lt;!&ndash;<div class="form-control"&ndash;&gt;
+                                         &lt;!&ndash;style="min-height: 200px;height: auto;padding: 0px; border: 2px dashed #d2d6de">&ndash;&gt;
+                                        &lt;!&ndash;<span ng-repeat="o in selects"&ndash;&gt;
+                                              &lt;!&ndash;class="btn btn-sm" style="margin: 3px 3px;"&ndash;&gt;
+                                              &lt;!&ndash;ng-class="{true:'btn-primary',false:'btn-default'}[checkExist(o)]"&ndash;&gt;
+                                              &lt;!&ndash;dnd-draggable="{type: 'column', column: o}" dnd-type="'column'"&ndash;&gt;
+                                              &lt;!&ndash;ng-click="toDimension({type: 'column', column: o})">{{o}}</span>&ndash;&gt;
+                                    &lt;!&ndash;</div>&ndash;&gt;
+                                &lt;!&ndash;</div>&ndash;&gt;
+                                &lt;!&ndash;<div class="col-md-6">
                                     <div class="tree tree-bg-dragin" style="max-height: 700px; overflow: auto;">
                                         <ul style="padding-left: 5px">
                                             <li class="parent_li">
@@ -264,8 +271,8 @@
                                             </li>
                                         </ul>
                                     </div>
-                                </div>
-                            </div>
+                                </div>&ndash;&gt;
+                            </div>-->
                         </div>
                     </div>
                 </div>
@@ -275,47 +282,76 @@
                     <button type="submit" ng-click="save()" class="btn btn-success pull-right"
                             style="margin-right: 5px">{{'COMMON.SAVE'|translate}}
                     </button>
-                    <div class="row">
+                    <div class="tableView">
                         <div class="col-md-12">
-                            <div id="dataset_preview" style="height: 300px;"></div>
+                            <div id="data_result" style="width:99%;max-height:390px;overflow:auto">
+                                <table class="table_wrapper" ng-show="selects">
+                                    <thead class="fixedHeader">
+                                    <tr class="header_key">
+                                        <th>
+                                            <div>id</div>
+                                        </th>
+                                        <th ng-repeat="item in selects">
+                                            <div>{{item}}</div>
+                                        </th>
+                                    </tr>
+                                    </thead>
+                                    <tbody class="scrollContent">
+                                    <tr ng-repeat="item in results">
+                                        <td>
+                                            <div>{{$index+1}}</div>
+                                        </td>
+                                        <td ng-repeat="i in item track by $index">
+                                            <div>{{i}}</div>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
+                    <!--<div class="row">
+                        <div class="col-md-12">
+                            <div id="dataset_preview" style="height: 300px;" ng-show="selects"></div>
+                        </div>
+                    </div>-->
                 </div>
                 <!-- /.box-footer-->
                 <div class="overlay" ng-show="loading">
                     <i class="fa fa-spinner fa-spin"></i>
                 </div>
+
             </div>
         </div>
     </div>
 </div>
 
 
-<!--<div id="sql_param_set" class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog"-->
-     <!--aria-labelledby="myModalLabel">-->
-    <!--<div class="modal-dialog modal-lg" role="document">-->
-        <!--<div class="modal-content">-->
-            <!--<div class="modal-header">-->
-                <!--<button type="button" class="close" data-dismiss="modal" aria-label="Close">-->
-                    <!--<span aria-hidden="true">&times;</span>-->
-                <!--</button>-->
-                <!--<h4 class="modal-title" id="myModalLabel">请指定此查询的参数:</h4>-->
-            <!--</div>-->
-            <!--<div class="modal-body">-->
-                <!--<form style="margin-left: 40px">-->
-                    <!--<div class="row" ng-repeat="param in sqlParams">-->
-                        <!--{{param}}:<input type="text" ng-model="$parent.paramValue[$index]">-->
-                    <!--</div>-->
-                <!--</form>-->
-            <!--</div>-->
-            <!--<div class="modal-footer">-->
-                <!--<button type="button" class="btn btn-default" data-dismiss="modal">-->
-                    <!--取消-->
-                <!--</button>-->
-                <!--<button type="button" class="btn btn-primary" ng-click="loadData()" data-dismiss="modal">确定-->
-                <!--</button>-->
-            <!--</div>-->
-        <!--</div>-->
-    <!--</div>-->
-<!--</div>-->
+<div id="sql_param_set" class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog"
+     aria-labelledby="myModalLabel">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title" id="myModalLabel">请指定此查询的参数:</h4>
+            </div>
+            <div class="modal-body">
+                <form style="margin-left: 40px">
+                    <div class="row" ng-repeat="param in sqlParams">
+                        {{param}}:<input type="text" ng-model="$parent.paramValue[$index]" charset="UTF-8">
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">
+                    取消
+                </button>
+                <button type="button" class="btn btn-primary" ng-click="loadData()" data-dismiss="modal">确定
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
 

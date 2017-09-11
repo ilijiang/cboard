@@ -730,37 +730,37 @@ cBoard.controller('widgetCtrl', function ($scope, $stateParams, $http, $uibModal
             });
         };
 
-        $scope.setSqlParam = function () {
-            var patt = /\${(.*?)}/g;
-            if (patt.test($scope.dataset.data.query.sql)) {
-                var arr = $scope.dataset.data.query.sql.match(patt);
-                $scope.sqlParams = [
-                    arr[0].replace(patt, "$1"),
-                ]
-                for (var i = 1; i < arr.length; i++) {
-                    var rep = arr[i].replace(patt, "$1");
-                    if ($scope.sqlParams.indexOf(rep) < 0) {
-                        $scope.sqlParams.push(rep);
-                    }
-                }
-                $('#sql_param_set').modal("show");
-            } else {
-              $scope.preview();
-            }
-        };
-
-
-        $scope.submitParam = function () {
-            $scope.curWidget.query = $scope.dataset.data.query;
-            if ($scope.sqlParams != null) {
-                for (var i = 0; i < $scope.sqlParams.length; i++) {
-                    var paramName = new RegExp("\\${" + $scope.sqlParams[i] + "}", "gi");
-                    var paramValue = $scope.paramValue[i];
-                    $scope.curWidget.query.sql = $scope.dataset.data.query.sql.replace(paramName, paramValue);
-                }
-            }
-            $scope.preview();
-        }
+        // $scope.setSqlParam = function () {
+        //     var patt = /\${(.*?)}/g;
+        //     if (patt.test($scope.dataset.data.query.sql)) {
+        //         var arr = $scope.dataset.data.query.sql.match(patt);
+        //         $scope.sqlParams = [
+        //             arr[0].replace(patt, "$1"),
+        //         ]
+        //         for (var i = 1; i < arr.length; i++) {
+        //             var rep = arr[i].replace(patt, "$1");
+        //             if ($scope.sqlParams.indexOf(rep) < 0) {
+        //                 $scope.sqlParams.push(rep);
+        //             }
+        //         }
+        //         $('#sql_param_set').modal("show");
+        //     } else {
+        //       $scope.preview();
+        //     }
+        // };
+        //
+        //
+        // $scope.submitParam = function () {
+        //     $scope.curWidget.query = $scope.dataset.data.query;
+        //     if ($scope.sqlParams != null) {
+        //         for (var i = 0; i < $scope.sqlParams.length; i++) {
+        //             var paramName = new RegExp("\\${" + $scope.sqlParams[i] + "}", "gi");
+        //             var paramValue = $scope.paramValue[i];
+        //             $scope.curWidget.query.sql = $scope.dataset.data.query.sql.replace(paramName, paramValue);
+        //         }
+        //     }
+        //     $scope.preview();
+        // }
 
 
         $scope.preview = function () {
@@ -1079,7 +1079,7 @@ cBoard.controller('widgetCtrl', function ($scope, $stateParams, $http, $uibModal
                 $scope.alerts = [];
             } else {
                 $scope.loading = true;
-                dataService.getColumns({
+                dataService.getDps({
                     datasource: $scope.datasource ? $scope.datasource.id : null,
                     query: $scope.curWidget.query,
                     datasetId: $scope.customDs ? undefined : $scope.curWidget.datasetId,

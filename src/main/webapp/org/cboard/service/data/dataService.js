@@ -288,8 +288,8 @@ cBoard.service('dataService', function ($http, $q, updateService) {
         });
     };
 
-    this.getColumns = function (option) {
-        $http.post("dashboard/getColumns.do", {
+    this.getDps = function (option) {
+        $http.post("dashboard/getDps.do", {
             datasourceId: option.datasource,
             query: option.query ? angular.toJson(option.query) : null,
             datasetId: option.datasetId,
